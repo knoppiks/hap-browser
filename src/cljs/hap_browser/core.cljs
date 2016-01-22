@@ -143,9 +143,9 @@
                (set-uri-and-doc! app-state resource))
           (catch js/Error e
             (if-let [ex-data (ex-data e)]
-              (if-let [doc (:body ex-data)]
+              (let [doc (:body ex-data)]
                 (set-uri-and-doc! app-state nil doc)
-                (alert! owner :danger (str (.-message e)
+                (alert! owner :warning (str (.-message e)
                                            (when-let [status (:status ex-data)]
                                              (str " Status was " status ".")))))
               (unexpected-error! owner e))))))))
@@ -166,9 +166,9 @@
                (set-uri-and-doc! app-state nil))
           (catch js/Error e
             (if-let [ex-data (ex-data e)]
-              (if-let [doc (:body ex-data)]
+              (let [doc (:body ex-data)]
                 (set-uri-and-doc! app-state nil doc)
-                (alert! owner :danger (str "Fetch error: " (.-message e))))
+                (alert! owner :warning (str "Fetch error: " (.-message e))))
               (unexpected-error! owner e))))))))
 
 (s/defn to-args :- hap/Args [params :- hap/Params]
@@ -200,9 +200,9 @@
             (set-uri-and-doc! app-state (:self (:links doc)) doc))
           (catch js/Error e
             (if-let [ex-data (ex-data e)]
-              (if-let [doc (:body ex-data)]
+              (let [doc (:body ex-data)]
                 (set-uri-and-doc! app-state nil (assoc-form doc key form))
-                (alert! owner :danger (str "Create error: " (.-message e))))
+                (alert! owner :warning (str "Create error: " (.-message e))))
               (unexpected-error! owner e))))))))
 
 (defn update-loop
@@ -218,9 +218,9 @@
             (set-uri-and-doc! app-state (-> doc :links :self) doc))
           (catch js/Error e
             (if-let [ex-data (ex-data e)]
-              (if-let [doc (:body ex-data)]
+              (let [doc (:body ex-data)]
                 (set-uri-and-doc! app-state nil doc)
-                (alert! owner :danger (str "Update error: " (.-message e))))
+                (alert! owner :warning (str "Update error: " (.-message e))))
               (unexpected-error! owner e))))))))
 
 (defn delete-loop
@@ -238,9 +238,9 @@
             (set-uri-and-doc! app-state up (<? (hap/fetch up))))
           (catch js/Error e
             (if-let [ex-data (ex-data e)]
-              (if-let [doc (:body ex-data)]
+              (let [doc (:body ex-data)]
                 (set-uri-and-doc! app-state nil doc)
-                (alert! owner :danger (str "Delete error: " (.-message e))))
+                (alert! owner :warning (str "Delete error: " (.-message e))))
               (unexpected-error! owner e))))))))
 
 ;; ---- Location Bar ----------------------------------------------------------

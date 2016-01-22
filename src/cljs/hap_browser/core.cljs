@@ -113,8 +113,9 @@
   (some-> (or (:href resource) resource) (str)))
 
 (defn set-uri-and-doc! [app-state resource doc]
-  (om/transact! app-state #(-> (->> (to-uri resource)
-                                    (assoc-in % [:location-bar :uri]))
+  (om/transact! app-state #(-> (if resource
+                                 (->> (to-uri resource)
+                                      (assoc-in % [:location-bar :uri])) %)
                                (assoc :doc (convert-doc doc)))))
 
 (defn unexpected-error! [owner e]
